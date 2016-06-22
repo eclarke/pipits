@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from pipits import sgtk_SeqIO as SeqIO
 
