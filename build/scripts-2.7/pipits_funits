@@ -156,7 +156,9 @@ if __name__ == '__main__':
     # Returncode is always 0 no matter what...
     # No way to tell whether it quits with an error or not other than by capturing STDERR with a phrase "FATAL ERROR" - not implemented
     logger.info("Extracting " + options.ITSx_subregion + " from sequences [ITSx]")
-    cmd = " ".join([ITSx, "-i", tmpDir + "/derep.fasta", "-o", tmpDir + "/derep", "--preserve", "T", "-t", "F", "--cpu", options.threads, "--save_regions", options.ITSx_subregion, "-p", options.itsx_db])
+    cmd = " ".join([ITSx, "-i", tmpDir + "/derep.fasta", "-o", tmpDir + "/derep", "--preserve", "T", "-t", "F", "--cpu", options.threads, "--save_regions", options.ITSx_subregion])
+    if options.itsx_db:
+        cmd += " ".join(["-p", options.itsx_db])
     rc.run_cmd_ITSx(cmd, logger, options.verbose)
 
 
