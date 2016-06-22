@@ -66,7 +66,7 @@ if __name__ == '__main__':
         action = "store",
         dest = "itsx_db",
         metavar = "<DIR>",
-        help = "Path to ITSx HMM-profile directory"
+        help = "Path to ITSx HMM-profile directory",
         required = False)
 
     options = parser.parse_args()
