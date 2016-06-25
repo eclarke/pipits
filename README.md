@@ -20,14 +20,14 @@ Download the latest package from github release (<https://github.com/hsgweon/pip
 
 ```sh
 cd ~
-wget https://github.com/hsgweon/pipits/releases/download/1.3.3/pipits-1.3.3.tar.gz
-tar xvfz pipits-1.3.3.tar.gz
+wget https://github.com/hsgweon/pipits/releases/download/1.3.4/pipits-1.3.4.tar.gz
+tar xvfz pipits-1.3.4.tar.gz
 ```
 
 Then enter into the created directory and install the package with (ignore errors/warnings):
 
 ```sh
-cd pipits-1.3.3
+cd pipits-1.3.4
 python setup.py clean --all
 python setup.py install --prefix=$HOME/pipits
 ```
@@ -68,9 +68,9 @@ We advise you to use Ubuntu 16.04 (xenial) or above as all of the dependencies a
 
    ```
    cd $HOME/pipits
-   wget https://github.com/torognes/vsearch/releases/download/v1.10.2/vsearch-1.10.2-linux-x86_64.tar.gz
-   tar xvfz vsearch-1.10.2-linux-x86_64.tar.gz
-   ln -s $HOME/pipits/vsearch-1.10.2-linux-x86_64/bin/vsearch bin/vsearch
+   wget https://github.com/torognes/vsearch/releases/download/v1.11.2/vsearch-1.11.2-linux-x86_64.tar.gz
+   tar xvfz vsearch-1.11.2-linux-x86_64.tar.gz
+   ln -s $HOME/pipits/vsearch-1.11.2-linux-x86_64/bin/vsearch bin/vsearch
    ```
 
 4. **ITSx** (<http://microbiology.se/software/itsx>) N.B. ITSx requires HMMER3
@@ -120,6 +120,7 @@ We advise you to use Ubuntu 16.04 (xenial) or above as all of the dependencies a
    sudo apt install python-numpy
    ```
 
+
 1.3 Reference datasets
 ----------------------
 
@@ -130,8 +131,6 @@ There are two reference datasets to download:
    We now provide trained UNITE fungal data (processed and trained for PIPITS).
    Please download this data (<http://sourceforge.net/projects/pipits/files/UNITE_retrained_31.01.2016.tar.gz>), save and extract it to an appropriate directory (e.g. $HOME/pipits/refdb).
 
-   Suggestion:
-    
    ```sh
    mkdir -p $HOME/pipits/refdb
    cd $HOME/pipits/refdb
@@ -143,13 +142,22 @@ There are two reference datasets to download:
 
    We also need to download UNITE UCHIME reference dataset for chimera removal. Download it from UNITE repository (<http://unite.ut.ee/repository.php>).
 
-   Suggestion:
-
    ```sh
    mkdir -p $HOME/pipits/refdb
    cd $HOME/pipits/refdb
    wget https://unite.ut.ee/sh_files/uchime_reference_dataset_01.01.2016.zip
    unzip uchime_reference_dataset_01.01.2016.zip
+   ```
+
+3. **(OPTIONAL) Warcup ITS reference trained dataset**
+
+   PIPITS supports Warcup ITS reference training dataset. By specifying "--warcup" when running pipits_process, PIPITS will also create a Warcup classified OTU table.
+
+   ```sh
+   mkdir -p $HOME/pipits/refdb
+   cd $HOME/pipits/refdb
+   wget http://sourceforge.net/projects/pipits/files/warcup_retrained_08.07.2014.tar.gz
+   tar xvfz warcup_retrained_08.07.2014.tar.gz
    ```
 
 
@@ -163,8 +171,8 @@ Open "~/.bashrc" or "~/.zshrc" (depending on which shell you are using) with a t
 
 
 ```sh    
-gedit ~/.zshrc 
-(or gedit ~/.bashrc)
+gedit ~/.bashrc
+(or gedit ~/.zshrc For Ubuntu 14.04 or below)
 ```
 
 And then add the following lines at the end of the file:
@@ -173,12 +181,14 @@ And then add the following lines at the end of the file:
     export PYTHONPATH=$HOME/pipits/lib/python2.7/site-packages:$PYTHONPATH
     export PIPITS_UNITE_REFERENCE_DATA_CHIMERA=$HOME/pipits/refdb/uchime_reference_dataset_01.01.2016/uchime_reference_dataset_01.01.2016.fasta
     export PIPITS_UNITE_RETRAINED_DIR=$HOME/pipits/refdb/UNITE_retrained
+    export PIPITS_WARCUP_RETRAINED_DIR=$HOME/pipits/refdb/warcup_retrained_08.07.2014
     export PIPITS_RDP_CLASSIFIER_JAR=$HOME/pipits/classifier.jar
 
 Then type (or alternatively close and re-open the terminal):
 
 ```sh
-source ~/.zshrc
+source ~/.bashrc
+(or source ~/.zshrc for Ubuntu 14.04 or below)
 ```
 
 1.5 Re-HMMPressing
@@ -216,6 +226,8 @@ pipits_getreadpairslist -i rawdata
 pipits_prep -i rawdata
 pipits_funits -i pipits_prep/prepped.fasta -x ITS2 
 pipits_process -i pipits_funits/ITS.fasta --Xmx 2G
+
+(pipits_process -i pipits_funits/ITS.fasta --Xmx 2G -o pipits_process_with_warcup --warcup) If you want additional OTU table with Warcup classification.
 ```
 
 Ensure everything works and you don't get an error message.
